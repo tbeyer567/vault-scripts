@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Finds Vault token accessors the have the "root" policy and prints a CSV.
+# Finds Vault token accessors the have the "root" policy or the 'hcp-root' policy.
 # Requires:
 #   - VAULT_ADDR and VAULT_TOKEN set (or equivalent Vault CLI auth)
 #   - vault CI
 #   - jq
+#
+# For HCP Vault dedicated clusters set the VAULT_NAMESPACE env var to 'admin'.
 
 if ! command -v vault >/dev/null 2>&1; then
   echo "vault CLI not found in PATH" >&2
@@ -50,7 +52,7 @@ echo "$accessors_json" | jq -r '.[]' | while read -r accessor; do
   fi
 
   # check if root policy is attached
-  has_root="$(echo "$lookup_json" | jq -e '.data.policies[]? | index("root")' 2>/dev/null || true)"
+  has_root="$(echo "$lookup_json" | jq -e '.data.policies | (index("root") or index("hcp-root"))' 2>/dev/null || true)"
   if [[ -z "$has_root" ]]; then
     continue
   fi
