@@ -64,7 +64,7 @@ echo "$accessors_json" | jq -r '.[]' | while read -r accessor; do
   policies_str="$(echo "$lookup_json" | jq -r '.data.policies // [] | join(", ")')"
 
   # format TTL
-  if [[ "$ttl_raw" == "0"]]; then
+  if [[ "$ttl_raw" == "0" ]]; then
     ttl="∞"
   else
     ttl="${ttl_raw}s"
