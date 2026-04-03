@@ -26,3 +26,10 @@ if [[ -z "${VAULT_TOKEN:-}" ]]; then
   echo "VAULT_TOKEN environment variable is not set" >&2
   exit 1
 fi
+
+# list out token accessors
+accessors_json="$(vault list -format=json auth/token/accessors 2>/dev/null || true)"
+
+echo "$accessors_json" | jq -r '.[]'
+
+
