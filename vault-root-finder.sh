@@ -24,7 +24,7 @@ fi
 
 _vault_token_file="${HOME}/.vault-token"
 if [[ -z "${VAULT_TOKEN:-}" ]]; then
-  if [[ -f "$_vault_token_file" || ! -s "$_vault_token_file" ]]; then
+  if [[ ! -f "$_vault_token_file" || ! -s "$_vault_token_file" ]]; then
     echo "set VAULT_TOKEN environment variable or log in to Vault" >&2
     exit 1
   fi
