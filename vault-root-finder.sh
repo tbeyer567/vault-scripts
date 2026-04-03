@@ -22,9 +22,12 @@ if [[ -z "${VAULT_ADDR:-}" ]]; then
   exit 1
 fi
 
+_vault_token_file="${HOME}/.vault-token"
 if [[ -z "${VAULT_TOKEN:-}" ]]; then
-  echo "VAULT_TOKEN environment variable is not set" >&2
-  exit 1
+  if [[ -f "$_vault_token_file" || ! -s "$_vault_token_file" ]]; then
+    echo "set VAULT_TOKEN environment variable or log in to Vault" >&2
+    exit 1
+  fi
 fi
 
 # list out token accessors
