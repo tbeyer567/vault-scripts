@@ -7,4 +7,22 @@ set -euo pipefail
 #   - vault CI
 #   - jq
 
+if ! command -v vault >/dev/null 2>&1; then
+  echo "vault CLI not found in PATH" >&2
+  exit 1
+fi
 
+if ! command -v jq >/dev/null 2>&1; then
+  echo "jq not found in PATH" >&2
+  exit 1
+fi
+
+if [[ -z "${VAULT_ADDR:-}" ]]; then
+  echo "VAULT_ADDR environment variable is not set" >&2
+  exit 1
+fi
+
+if [[ -z "${VAULT_TOKEN:-}" ]]; then
+  echo "VAULT_TOKEN environment variable is not set" >&2
+  exit 1
+fi
