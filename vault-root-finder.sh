@@ -50,7 +50,7 @@ echo "$accessors_json" | jq -r '.[]' | while read -r accessor; do
   fi
 
   # check if root policy is attached
-  has_root="$(echo "$lookup_json" | jq -e '.data.policies[]? | select(. == "root")' 2>/dev/null || true)"
+  has_root="$(echo "$lookup_json" | jq -e '.data.policies[]? | index("root")' 2>/dev/null || true)"
   if [[ -z "$has_root" ]]; then
     continue
   fi
