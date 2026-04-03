@@ -39,8 +39,8 @@ if [[ -z "$accessors_json" || "$accessors_json" == "null" ]]; then
   exit 0
 fi
 
-# add CSV header
-echo "accessor,display_name,creation_time,expire_time,policies,ttl,orphan"
+# output header
+echo "=== Vault Root Tokens ==="
 
 echo "$accessors_json" | jq -r '.[]' | while read -r accessor; do
   # loop through accessors and do a lookup
@@ -70,28 +70,14 @@ echo "$accessors_json" | jq -r '.[]' | while read -r accessor; do
     ttl="${ttl_raw}s"
   fi
 
-  # CSV quoting function
-  csv_quote() {
-    local s="$1"
-    if [[ "$s" == *","* || "$s" == *"\""* ]]; then
-      s="${s//\"/\"\"}"
-      printf '"%s"' "$s"
-    else
-      printf '%s' "$s"
-    fi
-  }
-
-  q_display="$(csv_quote "$display_name")"
-  q_creation="$(csv_quote "$creation_time")"
-  q_expire="$(csv_quote "$expire_time")"
-  q_policies="$(csv_quote "$policies_str")"
-
-  printf '%s,%s,%s,%s,%s,%s,%s\n' \
-    "$accessor" \
-    "$q_display" \
-    "$q_creation" \
-    "$q_expire" \
-    "$q_policies" \
-    "$ttl" \
-    "$orphan"
+  cat <<EOF
+Accessor     : $accessor
+Display Name : $display_name
+Created      : $creation_time
+Expires      : $expire_time
+TTL          : $ttl
+Orphan       : $orphan
+Policies     : $policies_str
+--------------------------------
+EOF
 done
