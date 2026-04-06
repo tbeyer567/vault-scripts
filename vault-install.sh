@@ -67,8 +67,8 @@ StartLimitBurst=3
 [Service]
 Type=notify
 EnvironmentFile=/etc/vault.d/vault.env
-User=vault
-Group=vault
+User=${VAULT_USER}
+Group=${VAULT_GROUP}
 ProtectSystem=full
 ProtectHome=read-only
 PrivateTmp=yes
@@ -197,8 +197,8 @@ else
 fi
 
 # Update file permissions
-chown --recursive vault:vault /etc/vault.d
-chown --recursive vault:vault /opt/vault
+chown --recursive "${VAULT_USER}:${VAULT_GROUP}" /etc/vault.d
+chown --recursive "${VAULT_USER}:${VAULT_GROUP}" /opt/vault
 chmod 0600 /opt/vault/tls/vault.crt /opt/vault/tls/vault.key
 chmod 0700 /opt/vault/tls
 chmod 0700 /etc/vault.d
