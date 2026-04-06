@@ -5,8 +5,8 @@ set -eu
 VAULT_VERSION="1.11.4+ent-1"
 VAULT_BINARY_LOCATION=/home/user123/vault
 VAULT_LICENSE_KEY="lskdjaflwekajlr3lwkrj23lja<UPDATE>"
-USER="vault"
-GROUP="vault"
+VAULT_USER="vault"
+VAULT_GROUP="vault"
 #ALL CERTIFICATES SHOULD BE BASE64
 #Concatenate for full chain
 CERTIFICATE_FILE=/path/to/vault.crt
@@ -42,13 +42,13 @@ do
 done
 
 
-if ! id -u $USER > /dev/null 2>&1; then
+if ! id -u $VAULT_USER > /dev/null 2>&1; then
         useradd \
                 --system \
                 --user-group \
                 --shell /bin/false \
-                --comment "${USER} service account" \
-                $USER
+                --comment "${VAULT_USER} service account" \
+                $VAULT_USER
 fi
 
 
@@ -113,7 +113,7 @@ cp $VAULT_BINARY_LOCATION /usr/bin/vault
 chown root:root /usr/bin/vault
 chmod 755 /usr/bin/vault
 
-#Create Licesnse File /opt/vault/license/vault.hclic
+#Create License File /opt/vault/license/vault.hclic
 echo "Writing License File /opt/vault/license/vault.hclic"
 sudo cat << EOF > /opt/vault/license/vault.hclic
 $VAULT_LICENSE_KEY
